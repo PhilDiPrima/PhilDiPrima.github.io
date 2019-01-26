@@ -1,0 +1,22 @@
++///////////////////////// How to Rename a Pluggable Database \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+
+1. Shutdown the pluggable database (PDB).
+sqlplus '/ as sysdba'
+SQL> shutdown pluggable database myplugdb3 close immediate;
+
+2. Startup the PDB in restricted mode
+sqlplus '/ as sysdba'
+SQL> alter pluggable database myplugdb3 open restricted;
+
+3. Rename the PDBs
+sqlplus '/ as sysdba'
+SQL> connect myplugdb3 as sysdba
+SQL> alter pluggable database myplugdb3 rename global_name to myplugdb3_new;
+
+4. Restart the PDB
+sqlplus '/ as sysbda'
+SQL> alter pluggable database close immediate;
+SQL> alter pluggable database open;
+Note
+That the connection to the pluggable database means the database
+name does not need to be specified in the start and stop commands.
++/////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+
