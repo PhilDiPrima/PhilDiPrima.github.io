@@ -1,3 +1,6 @@
+#
+# NOTE: I cannot take credit for most of this.  It was compiled from the web
+#
 Example: date +"%b"  gives Nov
 %A	is replaced by national representation of the full weekday name.
 %a	is replaced by national representation of the abbreviated weekday name.
