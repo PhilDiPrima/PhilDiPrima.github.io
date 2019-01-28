@@ -1,0 +1,47 @@
+#
+# NOTE: I cannot take credit for most of this.  It was compiled from the web
+#
+AWK SYNTAX made easy.. 
+========================
+awk 'BEGIN{xxx} {yyy} END{zzz}' 
+(xxx - Do all the initializations, executed ONLY once in the beginning.   yyy - Do the processing/calculations on the input data   zzz - Do the final action, like printing etc.  
+executed ONLY once in the end,  
+Basically BEGIN & END are special blocks.  
+The yyy block is the main part which will be excuted for EACH input line. All the three sections in awk are optional.   
+Ex. echo "5 10" | awk 'BEGIN{SUM=0} {SUM=SUM+$1+$2} END{print SUM}' 
+-or- 
+echo -e "5 10 \n 15 20" | awk 'BEGIN{SUM=0} {SUM=SUM+$1+$2} END{print SUM}'
+echo -e "5 10 \n 15 20" | awk '{print $1}' [This is especially useful in scripting, when you want to extract a column or something like that]   
+Special Variables in awk: FS - Field seperator ( default blank spaces ), NR - Line number, FNR - Line number in current file, $0 - All the fields in a line.    
+
+Pass variables from SHELL to AWK : ls -lk| awk -v a=$PWD '{ printf("%s/%s\n",a,$0) }')  
+NOTE FOR POSIX SOLARIS - use nawk
+for i in `zoneadm list -icv|grep running|awk '{print $2}'`; do zlogin $i zpool list -H|/usr/bin/nawk -v i="$i" '{print i" "$1" "$5}';done
+another example: ssh oracle@blade1-8 '. ./.bash_profile > /dev/null; co;'| awk '{print "srvctl somthing database -d "$3}' [the  > /dev/null; executes the command without printing to the screen ]   
+
+
+awk '/Checkpoint not complete/ {print $0}' $ORACLE_HOME/admin/$DB_UNIQUE_NAME/bdump/alert_$ORACLE_SID.log
+awk '/ORA-/ {print $0}' $ORACLE_HOME/admin/$DB_UNIQUE_NAME/bdump/alert_$ORACLE_SID.log|tail -1  -- last error
+
+
+Oracle quick find awk fields
+$0 ~ /Errors in file/ {print $0}
+$0 ~ /PMON: terminating instance due to error 600/ {print $0}
+$0 ~ /Started recovery/{print $0}
+$0 ~ /Archival required/{print $0}
+$0 ~ /Instance terminated/ {print $0}
+$0 ~ /Checkpoint not complete/ {print $0}
+$1 ~ /ORA-/ { print $0; flag=1 }
+$0 !~ /ORA-/ {if (flag==1){print $0; flag=0;print " "} }
+$0 ~ /ERROR_AUDIT/ {print $0}
+$0 ~ /LGWR switch/ {print $0}
+
+
+Awk one liners
+--------------
+Take the average of the first column in a text file and round to 3 decimal places
+$ uptime|awk '{print $12}' >> loadavg.txt
+$ awk '{sum=sum+$1} END {printf("%.3f\n", sum/NR)}' loadavg.txt
+
+echo "154:266:377:454:533" | awk -F: '{print $4}'
+454
