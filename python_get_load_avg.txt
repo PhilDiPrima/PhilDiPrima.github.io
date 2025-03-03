@@ -1,0 +1,2 @@
+# Another way to get the average of the uptime load average as one value (imports the 'os' module).  Won't work unless you have Python installed
+python -c 'import os;print os.getloadavg()[0]'
